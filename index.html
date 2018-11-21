@@ -7,6 +7,150 @@
     <title>Document</title>
 </head>
 <body>
+    <h1>Word Guessing Game!</h1>
     
+    
+    
+    <div id="thisWord">
+        <h4>Current Word: </h4>
+        <h3 id="currentWord"></h3>
+    </div>
+    <div id="winning">
+        <h4>Wins: </h4>
+        <h4 id="totalWins"></h4>
+    </div>
+    <div id="guesses">
+        <h4>Guesses Remaining: </h4>
+        <h4 id="remainingGuesses"></h4>
+    </div>
+    <div id="guessed">
+        <h4>Letters Guessed: </h4> 
+        <h3 id="guessedLetters"></h3>
+    </div>
+    <button id="reset">Give Up!</button>
+
+
+    <script>
+        //Variables
+        var alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+        var wordBank = ['something', 'other', 'another'];
+        var wins = 0;
+        var loss = 0;
+        var wrongLetter = [];
+        var guessesLeft = 8;
+        var underScores = [];
+        var userGuesses = [];
+        var winCounter = 0;
+        
+
+        //Function: Start game
+        //==================================================================
+        function startGame(){
+            //Picks random word on game start
+            randWord = wordBank[Math.floor(Math.random() * wordBank.length)];
+            console.log(randWord)
+            
+            for(var i = 0; i < randWord.length; i++){
+                underScores.push('_');
+            }
+            //Prints the underscores to the website
+            document.getElementById('currentWord').textContent = underScores.join(' ');
+
+            //reset
+            wrongLetter = [];
+            guessesLeft = 8;
+            underScores = [];
+
+
+            //Print to website 
+            document.getElementById('remainingGuesses').textContent = guessesLeft;    
+        }
+        
+         document.getElementById('reset').onclick = function giveUp() {
+             alert('You gave up! The word was ' + randWord);
+             var guessesLeft = 8;
+             var underScores = [];
+             var wrongLetter = [];
+             startGame();
+             document.getElementById('totalWins').textContent --;
+        }    
+            
+
+        
+        
+        //Wins and Losses
+        function winLose()
+        {
+            if(winCounter === randWord.length)
+            {
+                alert('Winner!');
+                underScores = [];
+                userGuesses = [];
+                document.getElementById('totalWins').textContent ++;
+                startGame();
+            }
+            else if(guessesLeft === 0)
+            {
+                alert('Loser!');
+                underScores = [];
+                userGuesses = [];
+                document.getElementById('totalWins').textContent --;
+                startGame();  
+            }
+        }
+        //User guesses
+        document.onkeyup = function(event){
+            userGuesses = event.key;
+            
+            
+            //Checking if the letter is correct
+            if(randWord.indexOf(userGuesses) > -1)
+            {
+                for(var i = 0; i < randWord.length; i++)
+                {   
+                    //Replaces underscore with correct letter
+                    if(userGuesses === randWord[i])
+                    {
+                        //setting the value to underscores
+		                
+                        //SOMETHING HERE IS NOT RIGHT!!!! Will Not Put Letters in Correct Spaces and disappearing "_"
+                        underScores[i] = userGuesses;
+                        document.getElementById('currentWord').textContent = underScores.join(' ');
+                        winCounter ++;
+                        winLose();
+                    }
+                }
+            } 
+            else 
+            {
+                //Removes tries if wrong letter
+                wrongLetter.push(userGuesses);
+                if(userGuesses = wrongLetter){
+                    //trying to make it only letters and no other buttons!!!!!!
+                    // if(userGuesses = alphabet) {
+                    // document.getElementById('guessedLetters').textContent = userGuesses.join(' ');
+                    // }
+                document.getElementById('remainingGuesses').textContent = guessesLeft --;
+                }
+                if(guessesLeft < 1){
+                    alert('Loser!')
+                    underScores = [];
+                    document.getElementById('totalWins').textContent--;
+                    startGame();
+                }
+                console.log(wrongLetter);
+                winLose();
+            }
+        }
+        
+        
+        //Main
+        //==================================================================
+
+        startGame();
+
+
+
+    </script>
 </body>
 </html>
